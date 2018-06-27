@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -16,7 +17,6 @@ namespace _07SimpePictureViewer
         string directoryname = "";
         string filename = "";
         int index = 0;
-        int MAX = 0;
         public Form1()
         {
             InitializeComponent();
@@ -30,27 +30,70 @@ namespace _07SimpePictureViewer
         private void Openfile(string openFilePass)
         {
             int count = 0;
-            if (System.IO.Path.GetExtension(openFilePass) != ".jpg" && System.IO.Path.GetExtension(openFilePass) != ".png")
+            string[] ext = { ".png", ".jpeg", ".jpg" };
+            if (ext.Contains(System.IO.Path.GetExtension(openFilePass.ToLower())))
             {
-                MessageBox.Show("画像ファイルを選択してください。");
-            }
-            else
-            {
+                files = new string[0];
+                directoryname = "";
+                filename = "";
+                index = 0;
                 System.Drawing.Bitmap bm = new System.Drawing.Bitmap(openFilePass);
                 pictureBox1.Image = bm;
                 directoryname = System.IO.Path.GetDirectoryName(openFilePass);
                 filename = System.IO.Path.GetFileName(openFilePass);
                 System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(directoryname);
-                System.IO.FileInfo[] openfiles = di.GetFiles("*.jpg", System.IO.SearchOption.AllDirectories);
+                System.IO.FileInfo[] openfiles = di.GetFiles("*.*", System.IO.SearchOption.AllDirectories);
                 foreach (System.IO.FileInfo f in openfiles)
                 {
-                    if (f.FullName == openFilePass)
+                    if (ext.Contains(System.IO.Path.GetExtension(f.FullName.ToLower())))
                     {
-                        index = count;
+                        if (f.FullName == openFilePass)
+                        {
+                            index = count;
+                        }
+                        Array.Resize(ref files, files.Length + 1);
+                        files[count] = f.FullName;
+                        count += 1;
                     }
-                    Array.Resize(ref files, files.Length + 1);
-                    files[count] = f.FullName;
-                    count += 1;
+                }
+            }
+            else
+            {
+                MessageBox.Show("画像ファイルを選択してください。");
+            }
+        }
+
+        private void Next()
+        {
+
+            if (files.Length != 0)
+            {
+                index += 1;
+                if (files.Length > index)
+                {
+                    pictureBox1.Image = new System.Drawing.Bitmap(files[index]);
+                }
+                else
+                {
+                    index = 0;
+                    pictureBox1.Image = new System.Drawing.Bitmap(files[index]);
+                }
+            }
+        }
+
+        private void Back()
+        {
+            if (files.Length != 0)
+            {
+                index -= 1;
+                if (0 < index)
+                {
+                    pictureBox1.Image = new System.Drawing.Bitmap(files[index]);
+                }
+                else
+                {
+                    index = files.Length - 1;
+                    pictureBox1.Image = new System.Drawing.Bitmap(files[index]);
                 }
             }
         }
@@ -84,22 +127,12 @@ namespace _07SimpePictureViewer
 
         private void pictureBox1_MouseClick(object sender, MouseEventArgs e)
         {
-            index += 1;
-            if (files.Length > index)
-            {
-                pictureBox1.Image = new System.Drawing.Bitmap(files[index]);
-            }
-            else
-            {
-                index = 0;
-                pictureBox1.Image = new System.Drawing.Bitmap(files[index]);
-            }
-
+            Next();
         }
 
         private void フィットToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if(フィットToolStripMenuItem.Checked)
+            if (フィットToolStripMenuItem.Checked)
             {
                 フィットToolStripMenuItem.Checked = false;
                 pictureBox1.SizeMode = PictureBoxSizeMode.AutoSize;
@@ -111,8 +144,6 @@ namespace _07SimpePictureViewer
             }
         }
 
-       
-
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
@@ -120,33 +151,71 @@ namespace _07SimpePictureViewer
                 //矢印キーが押されたことを表示する
                 case Keys.Up:
                 case Keys.Left:
-                    index -= 1;
-                    if (0 < index)
-                    {
-                        pictureBox1.Image = new System.Drawing.Bitmap(files[index]);
-                    }
-                    else
-                    {
-                        index = files.Length - 1;
-                        pictureBox1.Image = new System.Drawing.Bitmap(files[index]);
-                    }
+                    Back();
                     break;
 
                 case Keys.Right:
                 case Keys.Down:
-                    index += 1;
-                    if (files.Length > index)
-                    {
-                        pictureBox1.Image = new System.Drawing.Bitmap(files[index]);
-                    }
-                    else
-                    {
-                        index = 0;
-                        pictureBox1.Image = new System.Drawing.Bitmap(files[index]);
-                    }
+                    Next();
                     break;
-                    
+
             }
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
+        {
+
+        }
+
+        private void 開くToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            string openFilePass;
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                openFilePass = openFileDialog1.FileName;
+                Openfile(openFilePass);
+            }
+        }
+
+        private void 進むToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Next();
+        }
+
+        private void 戻るToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Back();
+        }
+
+        private void メニューバー非表示ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            menuStrip1.Dock = DockStyle.None;
+            メニューバー表示ToolStripMenuItem.Checked = false;
+        }
+
+        private void メニューバー表示ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (メニューバー表示ToolStripMenuItem.Checked)
+            {
+                menuStrip1.Dock = DockStyle.None;
+                メニューバー表示ToolStripMenuItem.Checked = false;
+            }
+            else
+            {
+                menuStrip1.Dock = DockStyle.Top;
+                メニューバー表示ToolStripMenuItem.Checked = true;
+            }
+        }
+
+        private void pictureBox1_DoubleClick(object sender, EventArgs e)
+        {
+            Next();
+            Next();
         }
     }
 }
