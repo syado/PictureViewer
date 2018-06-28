@@ -20,11 +20,6 @@ namespace _07SimpePictureViewer
             InitializeComponent();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
-
         private void Openfile(string openFilePass)
         {
             int count = 0;
@@ -63,6 +58,16 @@ namespace _07SimpePictureViewer
             }
         }
 
+        private void Open()
+        {
+            string openFilePass;
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                openFilePass = openFileDialog1.FileName;
+                Openfile(openFilePass);
+            }
+        }
+
         private void Next()
         {
 
@@ -87,6 +92,7 @@ namespace _07SimpePictureViewer
                 Draw();
             }
         }
+
         private void Draw()
         {
             if (files.Length != 0)
@@ -124,7 +130,6 @@ namespace _07SimpePictureViewer
             }
         }
 
-
         private void Fullscreen(bool flag)
         {
             if (flag)
@@ -145,7 +150,6 @@ namespace _07SimpePictureViewer
             }
         }
         
-
         private void Form1_DragDrop(object sender, DragEventArgs e)
         {
             string openFilePass;
@@ -162,19 +166,15 @@ namespace _07SimpePictureViewer
                 e.Effect = DragDropEffects.Copy;
             }
         }
-
-        private void 開くToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            string openFilePass;
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                openFilePass = openFileDialog1.FileName;
-                Openfile(openFilePass);
-            }
-        }
-
+        
         private void pictureBox1_MouseClick(object sender, MouseEventArgs e)
         {
+            Next();
+        }
+
+        private void pictureBox1_DoubleClick(object sender, EventArgs e)
+        {
+            Next();
             Next();
         }
 
@@ -191,7 +191,7 @@ namespace _07SimpePictureViewer
                 pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             }
         }
-        
+
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
@@ -229,24 +229,14 @@ namespace _07SimpePictureViewer
             }
         }
 
-        private void pictureBox1_Click(object sender, EventArgs e)
+        private void 開くToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
-        }
-
-        private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
-        {
-
+            Open();
         }
 
         private void 開くToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            string openFilePass;
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                openFilePass = openFileDialog1.FileName;
-                Openfile(openFilePass);
-            }
+            Open();
         }
 
         private void 進むToolStripMenuItem_Click(object sender, EventArgs e)
@@ -279,29 +269,17 @@ namespace _07SimpePictureViewer
             }
         }
 
-        private void pictureBox1_DoubleClick(object sender, EventArgs e)
-        {
-            Next();
-            Next();
-        }
-
         private void フルスクリーンSToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (this.FormBorderStyle == FormBorderStyle.None)
-            {
-                Fullscreen(false); //フルスクリーン解除
-                フルスクリーンSToolStripMenuItem.Checked = false;
-                フルスクリーンToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                Fullscreen(true); //フルスクリーン
-                フルスクリーンSToolStripMenuItem.Checked = true;
-                フルスクリーンToolStripMenuItem.Checked = true;
-            }
+            Fullscreen_switch();
         }
 
         private void フルスクリーンToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Fullscreen_switch();
+        }
+        
+        private void Fullscreen_switch()
         {
             if (this.FormBorderStyle == FormBorderStyle.None)
             {
@@ -341,7 +319,18 @@ namespace _07SimpePictureViewer
 
         private void 窓ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            窓_switch();
+        }
+
+        private void 窓ToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            窓_switch();
+        }
+
+        private void 窓_switch()
+        {
             窓ToolStripMenuItem.Checked = !窓ToolStripMenuItem.Checked;
+            窓ToolStripMenuItem1.Checked = !窓ToolStripMenuItem1.Checked;
             Draw();
         }
     }

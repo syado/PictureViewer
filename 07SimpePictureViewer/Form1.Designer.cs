@@ -43,11 +43,12 @@
             this.フィットToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.メニューバー非表示ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.フルスクリーンSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.窓ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.button1 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.窓ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.窓ToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -64,7 +65,6 @@
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
-            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
             this.pictureBox1.DoubleClick += new System.EventHandler(this.pictureBox1_DoubleClick);
             this.pictureBox1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseClick);
             // 
@@ -75,10 +75,10 @@
             this.進むToolStripMenuItem,
             this.戻るToolStripMenuItem,
             this.メニューバー表示ToolStripMenuItem,
-            this.フルスクリーンToolStripMenuItem});
+            this.フルスクリーンToolStripMenuItem,
+            this.窓ToolStripMenuItem1});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(193, 114);
-            this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(193, 158);
             // 
             // 開くToolStripMenuItem1
             // 
@@ -177,6 +177,13 @@
             this.フルスクリーンSToolStripMenuItem.Text = "フルスクリーン(&S)";
             this.フルスクリーンSToolStripMenuItem.Click += new System.EventHandler(this.フルスクリーンSToolStripMenuItem_Click);
             // 
+            // 窓ToolStripMenuItem
+            // 
+            this.窓ToolStripMenuItem.Name = "窓ToolStripMenuItem";
+            this.窓ToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
+            this.窓ToolStripMenuItem.Text = "２窓";
+            this.窓ToolStripMenuItem.Click += new System.EventHandler(this.窓ToolStripMenuItem_Click);
+            // 
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
@@ -211,12 +218,12 @@
             this.textBox1.TabIndex = 3;
             this.textBox1.Text = "10";
             // 
-            // 窓ToolStripMenuItem
+            // 窓ToolStripMenuItem1
             // 
-            this.窓ToolStripMenuItem.Name = "窓ToolStripMenuItem";
-            this.窓ToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
-            this.窓ToolStripMenuItem.Text = "２窓";
-            this.窓ToolStripMenuItem.Click += new System.EventHandler(this.窓ToolStripMenuItem_Click);
+            this.窓ToolStripMenuItem1.Name = "窓ToolStripMenuItem1";
+            this.窓ToolStripMenuItem1.Size = new System.Drawing.Size(192, 22);
+            this.窓ToolStripMenuItem1.Text = "２窓";
+            this.窓ToolStripMenuItem1.Click += new System.EventHandler(this.窓ToolStripMenuItem1_Click);
             // 
             // Form1
             // 
@@ -233,7 +240,6 @@
             this.Name = "Form1";
             this.ShowIcon = false;
             this.Text = "Viewer";
-            this.Load += new System.EventHandler(this.Form1_Load);
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.Form1_DragDrop);
             this.DragEnter += new System.Windows.Forms.DragEventHandler(this.Form1_DragEnter);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
@@ -267,6 +273,7 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.ToolStripMenuItem 窓ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 窓ToolStripMenuItem1;
     }
 }
 
