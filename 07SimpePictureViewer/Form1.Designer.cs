@@ -35,18 +35,19 @@
             this.進むToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.戻るToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.メニューバー表示ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.フルスクリーンToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.ファイルToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.開くToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.表示ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.フィットToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.メニューバー非表示ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.フルスクリーンSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.フルスクリーンToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.button1 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.窓ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -109,6 +110,13 @@
             this.メニューバー表示ToolStripMenuItem.Text = "メニューバー表示(&M)";
             this.メニューバー表示ToolStripMenuItem.Click += new System.EventHandler(this.メニューバー表示ToolStripMenuItem_Click);
             // 
+            // フルスクリーンToolStripMenuItem
+            // 
+            this.フルスクリーンToolStripMenuItem.Name = "フルスクリーンToolStripMenuItem";
+            this.フルスクリーンToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.フルスクリーンToolStripMenuItem.Text = "フルスクリーン";
+            this.フルスクリーンToolStripMenuItem.Click += new System.EventHandler(this.フルスクリーンToolStripMenuItem_Click);
+            // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -140,7 +148,8 @@
             this.表示ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.フィットToolStripMenuItem,
             this.メニューバー非表示ToolStripMenuItem,
-            this.フルスクリーンSToolStripMenuItem});
+            this.フルスクリーンSToolStripMenuItem,
+            this.窓ToolStripMenuItem});
             this.表示ToolStripMenuItem.Name = "表示ToolStripMenuItem";
             this.表示ToolStripMenuItem.Size = new System.Drawing.Size(44, 22);
             this.表示ToolStripMenuItem.Text = "表示";
@@ -161,10 +170,6 @@
             this.メニューバー非表示ToolStripMenuItem.Text = "メニューバー非表示(&M)";
             this.メニューバー非表示ToolStripMenuItem.Click += new System.EventHandler(this.メニューバー非表示ToolStripMenuItem_Click);
             // 
-            // openFileDialog1
-            // 
-            this.openFileDialog1.FileName = "openFileDialog1";
-            // 
             // フルスクリーンSToolStripMenuItem
             // 
             this.フルスクリーンSToolStripMenuItem.Name = "フルスクリーンSToolStripMenuItem";
@@ -172,12 +177,9 @@
             this.フルスクリーンSToolStripMenuItem.Text = "フルスクリーン(&S)";
             this.フルスクリーンSToolStripMenuItem.Click += new System.EventHandler(this.フルスクリーンSToolStripMenuItem_Click);
             // 
-            // フルスクリーンToolStripMenuItem
+            // openFileDialog1
             // 
-            this.フルスクリーンToolStripMenuItem.Name = "フルスクリーンToolStripMenuItem";
-            this.フルスクリーンToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
-            this.フルスクリーンToolStripMenuItem.Text = "フルスクリーン";
-            this.フルスクリーンToolStripMenuItem.Click += new System.EventHandler(this.フルスクリーンToolStripMenuItem_Click);
+            this.openFileDialog1.FileName = "openFileDialog1";
             // 
             // timer1
             // 
@@ -208,6 +210,13 @@
             this.textBox1.Size = new System.Drawing.Size(43, 23);
             this.textBox1.TabIndex = 3;
             this.textBox1.Text = "10";
+            // 
+            // 窓ToolStripMenuItem
+            // 
+            this.窓ToolStripMenuItem.Name = "窓ToolStripMenuItem";
+            this.窓ToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
+            this.窓ToolStripMenuItem.Text = "２窓";
+            this.窓ToolStripMenuItem.Click += new System.EventHandler(this.窓ToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -257,6 +266,7 @@
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.ToolStripMenuItem 窓ToolStripMenuItem;
     }
 }
 

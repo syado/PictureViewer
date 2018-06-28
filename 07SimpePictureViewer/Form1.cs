@@ -14,8 +14,6 @@ namespace _07SimpePictureViewer
     public partial class Form1 : Form
     {
         string[] files = new string[0];
-        string directoryname = "";
-        string filename = "";
         int index = 0;
         public Form1()
         {
@@ -34,11 +32,12 @@ namespace _07SimpePictureViewer
             if (ext.Contains(System.IO.Path.GetExtension(openFilePass.ToLower())))
             {
                 files = new string[0];
-                directoryname = "";
-                filename = "";
+                string　directoryname = "";
+                string　filename = "";
                 index = 0;
                 System.Drawing.Bitmap bm = new System.Drawing.Bitmap(openFilePass);
                 pictureBox1.Image = bm;
+
                 directoryname = System.IO.Path.GetDirectoryName(openFilePass);
                 filename = System.IO.Path.GetFileName(openFilePass);
                 System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(directoryname);
@@ -56,6 +55,7 @@ namespace _07SimpePictureViewer
                         count += 1;
                     }
                 }
+                Draw();
             }
             else
             {
@@ -69,15 +69,10 @@ namespace _07SimpePictureViewer
             if (files.Length != 0)
             {
                 index += 1;
-                if (files.Length > index)
-                {
-                    pictureBox1.Image = new System.Drawing.Bitmap(files[index]);
-                }
-                else
-                {
-                    index = 0;
-                    pictureBox1.Image = new System.Drawing.Bitmap(files[index]);
-                }
+                if (files.Length <= index) index = 0;
+                if (窓ToolStripMenuItem.Checked) index += 1;
+                if (files.Length <= index) index = 0;
+                Draw();
             }
         }
 
@@ -86,17 +81,49 @@ namespace _07SimpePictureViewer
             if (files.Length != 0)
             {
                 index -= 1;
-                if (0 < index)
+                if (0 > index) index = files.Length - 1;
+                if (窓ToolStripMenuItem.Checked) index -= 1;
+                if (0 > index) index = files.Length - 1;
+                Draw();
+            }
+        }
+        private void Draw()
+        {
+            if (files.Length != 0)
+            {
+                pictureBox1.Image.Dispose();
+                if (窓ToolStripMenuItem.Checked)
                 {
-                    pictureBox1.Image = new System.Drawing.Bitmap(files[index]);
+                    System.Drawing.Bitmap bm1 = new System.Drawing.Bitmap(files[index]);
+                    int index_tmp = 0;
+                    if (files.Length > index + 1)
+                    {
+                        index_tmp = index + 1;
+                    }
+                    System.Drawing.Bitmap bm2 = new System.Drawing.Bitmap(files[index_tmp]);
+                    int w = bm1.Width + bm2.Width;
+                    int h = bm1.Height;
+                    if (bm1.Height < bm2.Height)
+                    {
+                        h = bm2.Height;
+                    }
+                    System.Drawing.Bitmap bm = new System.Drawing.Bitmap(w, h);
+                    Graphics g = Graphics.FromImage(bm);
+                    g.DrawImage(bm2, 0, 0, bm2.Width, bm2.Height);
+                    g.DrawImage(bm1, bm2.Width, 0, bm1.Width, bm1.Height);
+                    g.Dispose();
+                    pictureBox1.Image = bm;
+                    bm1.Dispose();
+                    bm2.Dispose();
                 }
                 else
                 {
-                    index = files.Length - 1;
-                    pictureBox1.Image = new System.Drawing.Bitmap(files[index]);
+                    System.Drawing.Bitmap bm = new System.Drawing.Bitmap(files[index]);
+                    pictureBox1.Image = bm;
                 }
             }
         }
+
 
         private void Fullscreen(bool flag)
         {
@@ -169,15 +196,19 @@ namespace _07SimpePictureViewer
         {
             switch (e.KeyCode)
             {
-                //矢印キーが押されたことを表示する
-                case Keys.Up:
                 case Keys.Left:
-                    Back();
+                    if (窓ToolStripMenuItem.Checked) Next();
+                    else Back();
                     break;
-
                 case Keys.Right:
+                    if (窓ToolStripMenuItem.Checked) Back();
+                    else Next();
+                    break;
                 case Keys.Down:
                     Next();
+                    break;
+                case Keys.Up:
+                    Back();
                     break;
                 case Keys.F11:
                     if (this.FormBorderStyle == FormBorderStyle.None)
@@ -306,6 +337,12 @@ namespace _07SimpePictureViewer
                 timer1.Interval = Convert.ToInt32(Convert.ToDouble(textBox1.Text) * 1000);
                 timer1.Enabled = !timer1.Enabled;
             }
+        }
+
+        private void 窓ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            窓ToolStripMenuItem.Checked = !窓ToolStripMenuItem.Checked;
+            Draw();
         }
     }
 }
