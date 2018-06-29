@@ -14,31 +14,25 @@ namespace _07SimpePictureViewer
     public partial class Form1 : Form
     {
         string[] files = new string[0];
-        string directoryname = "";
-        string filename = "";
         int index = 0;
         public Form1()
         {
             InitializeComponent();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
-
         private void Openfile(string openFilePass)
         {
             int count = 0;
-            string[] ext = { ".png", ".jpeg", ".jpg" };
+            string[] ext = { ".png", ".jpg", ".gif", ".bmp", ".ico", ".tiff", ".jpeg" };
             if (ext.Contains(System.IO.Path.GetExtension(openFilePass.ToLower())))
             {
                 files = new string[0];
-                directoryname = "";
-                filename = "";
+                string　directoryname = "";
+                string　filename = "";
                 index = 0;
                 System.Drawing.Bitmap bm = new System.Drawing.Bitmap(openFilePass);
                 pictureBox1.Image = bm;
+
                 directoryname = System.IO.Path.GetDirectoryName(openFilePass);
                 filename = System.IO.Path.GetFileName(openFilePass);
                 System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(directoryname);
@@ -56,10 +50,21 @@ namespace _07SimpePictureViewer
                         count += 1;
                     }
                 }
+                Draw();
             }
             else
             {
                 MessageBox.Show("画像ファイルを選択してください。");
+            }
+        }
+
+        private void Open()
+        {
+            string openFilePass;
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                openFilePass = openFileDialog1.FileName;
+                Openfile(openFilePass);
             }
         }
 
@@ -69,15 +74,10 @@ namespace _07SimpePictureViewer
             if (files.Length != 0)
             {
                 index += 1;
-                if (files.Length > index)
-                {
-                    pictureBox1.Image = new System.Drawing.Bitmap(files[index]);
-                }
-                else
-                {
-                    index = 0;
-                    pictureBox1.Image = new System.Drawing.Bitmap(files[index]);
-                }
+                if (files.Length <= index) index = 0;
+                if (窓ToolStripMenuItem.Checked) index += 1;
+                if (files.Length <= index) index = 0;
+                Draw();
             }
         }
 
@@ -86,18 +86,70 @@ namespace _07SimpePictureViewer
             if (files.Length != 0)
             {
                 index -= 1;
-                if (0 < index)
+                if (0 > index) index = files.Length - 1;
+                if (窓ToolStripMenuItem.Checked) index -= 1;
+                if (0 > index) index = files.Length - 1;
+                Draw();
+            }
+        }
+
+        private void Draw()
+        {
+            if (files.Length != 0)
+            {
+                pictureBox1.Image.Dispose();
+                if (窓ToolStripMenuItem.Checked)
                 {
-                    pictureBox1.Image = new System.Drawing.Bitmap(files[index]);
+                    System.Drawing.Bitmap bm1 = new System.Drawing.Bitmap(files[index]);
+                    int index_tmp = 0;
+                    if (files.Length > index + 1)
+                    {
+                        index_tmp = index + 1;
+                    }
+                    System.Drawing.Bitmap bm2 = new System.Drawing.Bitmap(files[index_tmp]);
+                    int w = bm1.Width + bm2.Width;
+                    int h = bm1.Height;
+                    if (bm1.Height < bm2.Height)
+                    {
+                        h = bm2.Height;
+                    }
+                    System.Drawing.Bitmap bm = new System.Drawing.Bitmap(w, h);
+                    Graphics g = Graphics.FromImage(bm);
+                    g.DrawImage(bm2, 0, 0, bm2.Width, bm2.Height);
+                    g.DrawImage(bm1, bm2.Width, 0, bm1.Width, bm1.Height);
+                    g.Dispose();
+                    pictureBox1.Image = bm;
+                    bm1.Dispose();
+                    bm2.Dispose();
                 }
                 else
                 {
-                    index = files.Length - 1;
-                    pictureBox1.Image = new System.Drawing.Bitmap(files[index]);
+                    System.Drawing.Bitmap bm = new System.Drawing.Bitmap(files[index]);
+                    pictureBox1.Image = bm;
                 }
             }
         }
 
+        private void Fullscreen(bool flag)
+        {
+            if (flag)
+            {
+                this.TopMost = true;
+                this.TopMost = false;
+                this.FormBorderStyle = FormBorderStyle.None;
+                this.WindowState = FormWindowState.Maximized;
+                menuStrip1.Dock = DockStyle.None;
+                メニューバー表示ToolStripMenuItem.Checked = false;
+            }
+            else
+            {
+                this.FormBorderStyle = FormBorderStyle.Sizable;
+                this.WindowState = FormWindowState.Normal;
+                menuStrip1.Dock = DockStyle.Top;
+                メニューバー表示ToolStripMenuItem.Checked = true;
+            }
+        }
+        
         private void Form1_DragDrop(object sender, DragEventArgs e)
         {
             string openFilePass;
@@ -114,19 +166,15 @@ namespace _07SimpePictureViewer
                 e.Effect = DragDropEffects.Copy;
             }
         }
-
-        private void 開くToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            string openFilePass;
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                openFilePass = openFileDialog1.FileName;
-                Openfile(openFilePass);
-            }
-        }
-
+        
         private void pictureBox1_MouseClick(object sender, MouseEventArgs e)
         {
+            Next();
+        }
+
+        private void pictureBox1_DoubleClick(object sender, EventArgs e)
+        {
+            Next();
             Next();
         }
 
@@ -148,38 +196,47 @@ namespace _07SimpePictureViewer
         {
             switch (e.KeyCode)
             {
-                //矢印キーが押されたことを表示する
-                case Keys.Up:
                 case Keys.Left:
-                    Back();
+                    if (窓ToolStripMenuItem.Checked) Next();
+                    else Back();
                     break;
-
                 case Keys.Right:
+                    if (窓ToolStripMenuItem.Checked) Back();
+                    else Next();
+                    break;
                 case Keys.Down:
                     Next();
                     break;
-
+                case Keys.Up:
+                    Back();
+                    break;
+                case Keys.F11:
+                    if (this.FormBorderStyle == FormBorderStyle.None)
+                    {
+                        Fullscreen(false); //フルスクリーン解除
+                    }
+                    else
+                    {
+                        Fullscreen(true); //フルスクリーン
+                    }
+                    break;
+                case Keys.Escape:
+                    if (this.FormBorderStyle == FormBorderStyle.None)
+                    {
+                        Fullscreen(false); //フルスクリーン解除
+                    }
+                    break;
             }
         }
 
-        private void pictureBox1_Click(object sender, EventArgs e)
+        private void 開くToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
-        }
-
-        private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
-        {
-
+            Open();
         }
 
         private void 開くToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            string openFilePass;
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                openFilePass = openFileDialog1.FileName;
-                Openfile(openFilePass);
-            }
+            Open();
         }
 
         private void 進むToolStripMenuItem_Click(object sender, EventArgs e)
@@ -212,10 +269,69 @@ namespace _07SimpePictureViewer
             }
         }
 
-        private void pictureBox1_DoubleClick(object sender, EventArgs e)
+        private void フルスクリーンSToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Fullscreen_switch();
+        }
+
+        private void フルスクリーンToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Fullscreen_switch();
+        }
+        
+        private void Fullscreen_switch()
+        {
+            if (this.FormBorderStyle == FormBorderStyle.None)
+            {
+                Fullscreen(false); //フルスクリーン解除
+                フルスクリーンSToolStripMenuItem.Checked = false;
+                フルスクリーンToolStripMenuItem.Checked = false;
+            }
+            else
+            {
+                Fullscreen(true); //フルスクリーン
+                フルスクリーンSToolStripMenuItem.Checked = true;
+                フルスクリーンToolStripMenuItem.Checked = true;
+            }
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
         {
             Next();
-            Next();
+            if (Convert.ToDouble(textBox1.Text) >= 0.001)
+            {
+                timer1.Interval = Convert.ToInt32(Convert.ToDouble(textBox1.Text) * 1000);
+            }
+            else
+            {
+                timer1.Enabled = !timer1.Enabled;
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (Convert.ToDouble(textBox1.Text) >= 0.001)
+            {
+                timer1.Interval = Convert.ToInt32(Convert.ToDouble(textBox1.Text) * 1000);
+                timer1.Enabled = !timer1.Enabled;
+            }
+        }
+
+        private void 窓ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            窓_switch();
+        }
+
+        private void 窓ToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            窓_switch();
+        }
+
+        private void 窓_switch()
+        {
+            窓ToolStripMenuItem.Checked = !窓ToolStripMenuItem.Checked;
+            窓ToolStripMenuItem1.Checked = !窓ToolStripMenuItem1.Checked;
+            Draw();
         }
     }
 }
